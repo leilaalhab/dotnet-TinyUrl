@@ -7,28 +7,29 @@ using Microsoft.AspNetCore.Mvc;
 
 
 namespace dotnet_rpg.Controllers
-{
-    
+{ 
     [ApiController] 
     [Route("api/[controller]")] 
     public class BillController : ControllerBase
     {
         private readonly IBillService _BillService;
 
-        public BillController(IBillService billService)
+        private readonly ILogger _logger;
+
+        public BillController(IBillService billService, ILogger<BillController> logger)
         {
             _BillService = billService;
+
+            _logger = logger;
         }
 
-
-        // we must implement the get method to get our game character
-        // returns a specific http code along with the requested data
         [Authorize]
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetBillDto>>>> Get() // assumes its an http method
+        public async Task<ActionResult<ServiceResponse<List<GetBillDto>>>> Get() 
         {
-            return Ok(await _BillService.GetBills()); // we are also sending the status code 200 ok along with our mock character
+            _logger.LogInformation($"getting all bills of user {_BillService.getUserId()}");
+            return Ok(await _BillService.GetBills()); 
         }
 
     }

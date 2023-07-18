@@ -12,7 +12,7 @@ namespace dotnet_rpg.Services.AnswerService
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-        private int getUserId() => int.Parse(_httpContextAccessor.HttpContext!.User
+        public int getUserId() => int.Parse(_httpContextAccessor.HttpContext!.User
             .FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public AnswerService(DataContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)

@@ -13,10 +13,13 @@ namespace dotnet_rpg.Controllers
     public class SubscriptionController : ControllerBase
     {
         private readonly ISubscriptionService _SubscriptionTypeService;
+        private readonly ILogger _logger;
 
-        public SubscriptionController(ISubscriptionService characterService)
+
+        public SubscriptionController(ISubscriptionService characterService, ILogger<SubscriptionController> logger)
         {
             _SubscriptionTypeService = characterService;
+            _logger = logger;
         }
 
 
@@ -24,6 +27,7 @@ namespace dotnet_rpg.Controllers
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> Get() 
         {
+            _logger.LogInformation($"Accessing the subscription type of the user {_SubscriptionTypeService.getUserId}");
             return Ok(await _SubscriptionTypeService.GetSubscriptionType()); 
         }
         
@@ -32,6 +36,7 @@ namespace dotnet_rpg.Controllers
         [Authorize]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateSubscription(UpdatedSubscriptionDto updatedSubscriptionDto)
         {   
+            _logger.LogInformation($"Updating the subscription type of the user {_SubscriptionTypeService.getUserId}");
             var response = await _SubscriptionTypeService.UpdateSubscription(updatedSubscriptionDto);
             if (response.Data is null){
                 return NotFound(response);

@@ -20,7 +20,7 @@ namespace dotnet_rpg.Services.TinyUrlService
             _context = context;
         }
 
-        private int getUserId() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        public int getUserId() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public async Task<ServiceResponse<List<GetTinyUrlDto>>> CreateUrl(AddTinyUrlDto newUrl) {
             var serviceResponse = new ServiceResponse<List<GetTinyUrlDto>>();

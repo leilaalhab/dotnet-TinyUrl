@@ -16,5 +16,7 @@ namespace dotnet_rpg.Services.QandAService
         Task<ServiceResponse<List<GetQandADto>>> GetQandAs();
 
         Task<ServiceResponse<GetQandADto>> GetQandAbyId(int Id);
+
+        int getUserId();
     }
 }

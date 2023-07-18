@@ -9,30 +9,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_rpg.Controllers
 {
-    [ApiController] // an attribute added to the controller 
-    [Route("api/[controller]")] // how we find the specific controller when we want to call it - can be called by "api/Character"
+    [ApiController] 
+    [Route("api/[controller]")]
     public class AnswerController : ControllerBase
     {
         private readonly IAnswerService _AnswerService;
 
-        public AnswerController(IAnswerService answerService)
+        private readonly ILogger _logger;
+
+
+        public AnswerController(IAnswerService answerService, ILogger<AnswerController> logger)
         {
             _AnswerService = answerService;
+            _logger = logger;
         }
         
-
-        // in this method we are sending the data via the body of this request, however in the previous method
-        // the data was sent via the URL
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<GetAnswerDto>>>> AddAnswer(AddAnswerDto newAnswer)
         {
+            _logger.LogInformation($"The user {_AnswerService.getUserId()} wants to add an answer to question {newAnswer.questionId}");
             return Ok(await _AnswerService.AddAnswer(newAnswer));
         }
 
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult<ServiceResponse<List<GetAnswerDto>>>> DeleteAnswer(int Id) {
+             _logger.LogInformation($"The user {_AnswerService.getUserId()} wants to delete an answer {Id}");
             var response = await _AnswerService.DeleteAnswer(Id);
             if (response.Data is null){
                 return NotFound(response);
@@ -42,8 +45,9 @@ namespace dotnet_rpg.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<ServiceResponse<GetAnswerDto>>> UpdateUrlExpiration(UpdatedAnswerDto updatedAnswer)
+        public async Task<ActionResult<ServiceResponse<GetAnswerDto>>> UpdateAnswer(UpdatedAnswerDto updatedAnswer)
         {   
+             _logger.LogInformation($"The user {_AnswerService.getUserId()} wants to update an answer {updatedAnswer.Id}");
             var response = await _AnswerService.UpdateAnswer(updatedAnswer);
             if (response.Data is null){
                 return NotFound(response);

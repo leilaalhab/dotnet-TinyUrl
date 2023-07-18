@@ -12,7 +12,7 @@ namespace dotnet_rpg.Services.BillService
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-        private int getUserId() => int.Parse(_httpContextAccessor.HttpContext!.User
+        public int getUserId() => int.Parse(_httpContextAccessor.HttpContext!.User
             .FindFirstValue(ClaimTypes.NameIdentifier)!);
         public BillService(DataContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
@@ -27,5 +27,7 @@ namespace dotnet_rpg.Services.BillService
             serviceResponse.Data = dbBills.Select(c => _mapper.Map<GetBillDto>(c)).ToList();
             return serviceResponse;
         }
+
+        
     }
 }

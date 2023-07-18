@@ -8,5 +8,6 @@ namespace dotnet_rpg.Services.BillService
     public interface IBillService
     {
         Task<ServiceResponse<List<GetBillDto>>> GetBills();
+        int getUserId();
     }
 }

@@ -2,14 +2,21 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
+using Microsoft.Data.SqlClient;
+using dotnet_rpg.CustomMiddlewares;
+using dotnet_rpg.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // re useable components that add app functionalities
-builder.Services.AddDbContext<DataContext>(options => 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers();
+
+builder.Logging.AddDbLogger(options => {
+    builder.Configuration.GetSection("Logging")
+    .GetSection("Database").GetSection("Options").Bind(options);
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen( c => {
@@ -48,12 +55,13 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(); // solution for testing API
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 // the use components add middleware to the requests pipeline
 app.UseHttpsRedirection(); // how the app responds to http requests
 

@@ -18,6 +18,8 @@ namespace dotnet_rpg.Services.TinyUrlService
         Task<ServiceResponse<GetTinyUrlDto>> SetExpiration(UpdatedTinyUrlDto updatedTinyUrl);
 
         Task<ServiceResponse<List<GetTinyUrlDto>>> CreateUrl(AddTinyUrlDto newUrl);
+
+        int getUserId();
         
     }
 }

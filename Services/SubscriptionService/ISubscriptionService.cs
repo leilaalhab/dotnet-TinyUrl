@@ -11,6 +11,6 @@ namespace dotnet_rpg.Services.SubscriptionService
 
         Task<ServiceResponse<GetUserDto>> GetSubscriptionType();
 
-
+         int getUserId();
     }
 }

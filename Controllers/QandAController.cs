@@ -9,52 +9,53 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_rpg.Controllers
 {
-    [ApiController] // an attribute added to the controller 
-    [Route("api/[controller]")] // how we find the specific controller when we want to call it - can be called by "api/Character"
+    [ApiController] 
+    [Route("api/[controller]")] 
     public class QandAController : ControllerBase
     {
         private readonly IQandAService _QandAService;
 
-        public QandAController(IQandAService qandAService)
+        private readonly ILogger _logger;
+
+        public QandAController(IQandAService qandAService, ILogger<QandAController> logger)
         {
             _QandAService = qandAService;
+            _logger = logger;
         }
 
-        
-
-
-        // we must implement the get method to get our game character
-        // returns a specific http code along with the requested data
         [Authorize]
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetQandADto>>>> Get() // assumes its an http method
+        public async Task<ActionResult<ServiceResponse<List<GetQandADto>>>> Get()
         {
-            return Ok(await _QandAService.GetQandAs()); // we are also sending the status code 200 ok along with our mock character
+             _logger.LogInformation($"User {_QandAService.getUserId()} is trying to access all of their questions");
+            return Ok(await _QandAService.GetQandAs());
         }
 
 
-        // for a single character
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetQandADto>>> GetSingle(int id) // assumes its an http method
+        public async Task<ActionResult<ServiceResponse<GetQandADto>>> GetSingle(int id) 
         {
-            return Ok(await _QandAService.GetQandAbyId(id)); // we are also sending the status code 200 ok along with our mock character
+            _logger.LogInformation($"User {_QandAService.getUserId()} is trying to access their question {id}");
+
+            return Ok(await _QandAService.GetQandAbyId(id));
         }
         
 
-        // in this method we are sending the data via the body of this request, however in the previous method
-        // the data was sent via the URL
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<GetQandADto>>>> AddUrl(AddQandADto newQuestion)
+        public async Task<ActionResult<ServiceResponse<List<GetQandADto>>>> AddQuestion(AddQandADto newQuestion)
         {
+            _logger.LogInformation($"User {_QandAService.getUserId()} is trying to add a new question");
+
             return Ok(await _QandAService.AddQuestion(newQuestion));
         }
 
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult<ServiceResponse<List<GetQandADto>>>> DeleteQandA(int Id) {
+            _logger.LogInformation($"User {_QandAService.getUserId()} is trying to delete their question {Id}");
             var response = await _QandAService.DeleteQuestion(Id);
             if (response.Data is null){
                 return NotFound(response);
@@ -66,6 +67,7 @@ namespace dotnet_rpg.Controllers
         [Authorize]
         public async Task<ActionResult<ServiceResponse<GetQandADto>>> UpdateQandA(UpdatedQandADto updatedQuestion)
         {   
+            _logger.LogInformation($"User {_QandAService.getUserId()} is trying to update their question {updatedQuestion.Id}");
             var response = await _QandAService.UpdateQuestion(updatedQuestion);
             if (response.Data is null){
                 return NotFound(response);

@@ -12,5 +12,6 @@ namespace dotnet_rpg.Services.AnswerService
         Task<ServiceResponse<GetAnswerDto>> UpdateAnswer(UpdatedAnswerDto updatedAnswer);
 
         Task<ServiceResponse<GetQandADto>> DeleteAnswer(int Id);
+        int getUserId();
     }
 }
