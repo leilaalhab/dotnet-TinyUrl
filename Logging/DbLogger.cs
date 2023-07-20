@@ -20,18 +20,18 @@ namespace dotnet_rpg.Logging
     {
         _dbLoggerProvider = dbLoggerProvider;
     }
- 
-    public IDisposable BeginScope<TState>(TState state)
+
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull
     {
-        return null;
+        throw new NotImplementedException();
     }
- 
+
     public bool IsEnabled(LogLevel logLevel)
     {
         return logLevel != LogLevel.None;
     }
 
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+    public async void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         if (!IsEnabled(logLevel))
         {

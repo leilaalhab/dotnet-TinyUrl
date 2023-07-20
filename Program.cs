@@ -38,7 +38,7 @@ builder.Services.AddScoped<IQandAService, QandAService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IBillService, BillService>();
-
+builder.Services.AddSingleton<ILoggerProvider, DbLoggerProvider>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options => {

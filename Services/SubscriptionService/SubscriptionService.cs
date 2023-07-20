@@ -41,14 +41,14 @@ namespace dotnet_rpg.Services.SubscriptionService
         public async Task<ServiceResponse<GetUserDto>> UpdateSubscription(UpdatedSubscriptionDto updatedSubscriptionDto)
         {
             var response = new ServiceResponse<GetUserDto>();
-            User user = await _context.Users.FirstOrDefaultAsync(c =>  c.Id == getUserId());
+            User? user = await  _context.Users.FirstOrDefaultAsync(c =>  c.Id == getUserId());
             var bill = new Bill{User = await _context.Users.FirstOrDefaultAsync(u => u.Id == getUserId()), userId = getUserId(), CardNumber = updatedSubscriptionDto.CardNumber};
             try{
                 switch (updatedSubscriptionDto.SubscriptionType)
                 {
                     case SubscriptionTypeClass.Normal:
                         {
-                            user.subscriptionType = SubscriptionTypeClass.Normal;
+                            user!.subscriptionType = SubscriptionTypeClass.Normal;
                             bill.charged = 0;
                             bill.item = SubscriptionTypeClass.Normal;
                             break;
@@ -56,7 +56,7 @@ namespace dotnet_rpg.Services.SubscriptionService
 
                     case SubscriptionTypeClass.Premium:
                         {
-                            user.subscriptionType = SubscriptionTypeClass.Premium;
+                            user!.subscriptionType = SubscriptionTypeClass.Premium;
                             bill.charged = 50;
                             bill.item = SubscriptionTypeClass.Premium;
                             break;
@@ -64,7 +64,7 @@ namespace dotnet_rpg.Services.SubscriptionService
 
                     case SubscriptionTypeClass.Ultra:
                         {
-                            user.subscriptionType = SubscriptionTypeClass.Ultra;
+                            user!.subscriptionType = SubscriptionTypeClass.Ultra;
                             bill.charged = 100;
                             bill.item = SubscriptionTypeClass.Ultra;
                             break;

@@ -37,14 +37,12 @@ namespace dotnet_rpg.Services.UsageService
                     return response;
                 }
 
-
-
                 var Usage = new Usage{
                     Region = newUsage.Region,
                     tinyUrl = thisTinyUrl,
                 };
 
-                switch (thisTinyUrl.User.subscriptionType)
+                switch (thisTinyUrl.User?.subscriptionType)
                 { 
                     case SubscriptionTypeClass.Premium: 
                         thisTinyUrl.UsagesCount = thisTinyUrl.UsagesCount + 1;
